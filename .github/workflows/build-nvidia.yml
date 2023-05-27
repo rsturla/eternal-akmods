@@ -33,9 +33,9 @@ jobs:
         shell: bash
         run: |
           tags=()
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-$(date +%Y%m%d%H%M%S)")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-${GITHUB_SHA::7}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-$(date +%Y%m%d%H%M%S)")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-${GITHUB_SHA::7}")
 
           echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
 
