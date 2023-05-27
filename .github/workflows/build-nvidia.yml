@@ -7,6 +7,7 @@ on:
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME: akmods-nvidia
 
 jobs:
   build:
@@ -27,13 +28,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Generate Tags
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.IMAGE_REGISTRY }}/akmods-nvidia
-          tags: |
-            type=raw,value=${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}
+      - name: Generate Image Metadata
+        id: generate-meta
+        shell: bash
+        run: |
+          tags=()
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-$(date +%Y%m%d%H%M%S)")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-${GITHUB_SHA::7}")
+
+          echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
+          concat_tags=$(IFS=, ; echo "${tags[*]}")
+          echo "concat_tags=$concat_tags" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -46,11 +52,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Image
+        id: build-image
         uses: docker/build-push-action@v4
         with:
-          context: .
           file: nvidia/Containerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.generate-meta.outputs.concat_tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
