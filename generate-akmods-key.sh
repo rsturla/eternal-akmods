@@ -13,7 +13,7 @@ mkdir -p "${PWD}/${CERT_DIR}"
 
 # Bootstrap keys with a pre-existing image to avoid touching '/etc' or
 # installing additional packages on host
-docker run \
+podman run \
     --env="LANG=${LANG}" \
     --volume="${PWD}/${CERT_DIR}:/tmp/${CERT_DIR}:z" \
     --workdir="/tmp/${CERT_DIR}" \
