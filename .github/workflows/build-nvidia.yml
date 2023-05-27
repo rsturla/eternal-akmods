@@ -36,10 +36,7 @@ jobs:
           tags+=("${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-$(date +%Y%m%d%H%M%S)")
           tags+=("${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-${GITHUB_SHA::7}")
 
-          image="${{ env.IMAGE_REGISTRY }}/akmods-nvidia"
-
           echo "tags=$tags" >> $GITHUB_OUTPUT
-          echo "image=$image" >> $GITHUB_OUTPUT
 
       - name: Build Image
         id: build-image
@@ -56,7 +53,7 @@ jobs:
       - name: Push Image
         uses: redhat-actions/push-to-registry@v2
         with:
-          image: ${{ steps.generate-meta.outputs.image }}
+          image: akmods-nvidia
           tags: ${{ steps.generate-meta.outputs.tags }}
           registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ github.actor }}
