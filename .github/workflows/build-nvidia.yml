@@ -16,9 +16,14 @@ jobs:
     name: Build Nvidia akmods cache
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         fedora-version: [37, 38]
         nvidia-version: [530]
+
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout
