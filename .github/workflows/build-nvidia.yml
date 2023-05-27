@@ -25,18 +25,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Generate Tags
-        shell: bash
-        run: |
-          version_tag="${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}"
-          sha_tag="${GITHUB_SHA::8}-${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}"
-
-          tags=(
-            ${version_tag}
-            ${sha_tag}
-          )
-
-          echo "TAGS=${tags[*]}" >> $GITHUB_ENV
-          echo "SHA_TAG=${sha_tag}" >> $GITHUB_ENV
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}
+          tags: |
+            type=raw,value=${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -54,6 +48,6 @@ jobs:
           context: .
           file: nvidia/Containerfile
           push: true
-          tags: ${{ env.TAGS[*] }}
+          tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
