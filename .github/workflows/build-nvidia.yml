@@ -34,7 +34,7 @@ jobs:
           images: ${{ env.IMAGE_REGISTRY }}/akmods-nvidia
           tags: |
             type=raw,value=${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}
-            type=raw,value="${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-${GITHUB_SHA:0:7}"
+            type=raw,value=${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-${GITHUB_SHA:0:7}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
