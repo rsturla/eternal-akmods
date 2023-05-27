@@ -33,7 +33,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.IMAGE_REGISTRY }}/akmods-nvidia:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}
+          images: ${{ env.IMAGE_REGISTRY }}/akmods-nvidia
           tags: |
             type=raw,value=${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}
 
