@@ -1,0 +1,41 @@
+ARG FEDORA_BASE_VERSION=38
+ARG NVIDIA_MAJOR_VERSION=530
+
+FROM quay.io/fedora-ostree-desktops/base:${FEDORA_BASE_VERSION} AS builder
+
+ARG FEDORA_BASE_VERSION
+ARG NVIDIA_MAJOR_VERSION
+
+COPY nvidia/scripts /tmp/scripts
+COPY nvidia/nvidia-addons.spec /tmp/nvidia-addons/nvidia-addons.spec
+COPY _certs /tmp/certs
+
+ADD https://nvidia.github.io/nvidia-docker/rhel9.0/nvidia-docker.repo \
+    /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-runtime.repo
+ADD https://nvidia.github.io/nvidia-docker/rhel9.0/nvidia-docker.repo \
+    /etc/yum.repos.d/nvidia-container-runtime.repo
+
+COPY nvidia/files/etc/nvidia-container-runtime/config-rootless.toml \
+    /tmp/nvidia-addons/rpmbuild/SOURCES/config-rootless.toml
+
+ADD https://raw.githubusercontent.com/NVIDIA/dgx-selinux/master/bin/RHEL9/nvidia-container.pp \
+    /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container.pp
+
+RUN rpm-ostree install \
+  https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+  https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
+  rpm-ostree install \
+  rpmfusion-nonfree-release  \
+  rpmfusion-free-release  \
+  --uninstall=rpmfusion-free-release-$(rpm -E %fedora)-1.noarch  \
+  --uninstall=rpmfusion-nonfree-release-$(rpm -E %fedora)-1.noarch
+
+RUN /tmp/scripts/build.sh
+
+RUN rpm -ql /tmp/nvidia-addons/rpmbuild/RPMS/*/*.rpm
+
+
+FROM scratch AS artifacts
+
+COPY --from=builder /var/cache /var/cache
+COPY --from=builder /tmp/nvidia-addons /tmp/nvidia-addons
