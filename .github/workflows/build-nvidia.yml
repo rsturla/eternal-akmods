@@ -54,6 +54,6 @@ jobs:
           context: .
           file: nvidia/Containerfile
           push: true
-          tags: ${{ env.TAGS}}
+          tags: ${{ env.TAGS[*] }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
