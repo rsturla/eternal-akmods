@@ -37,7 +37,7 @@ jobs:
           tags+=("${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-$(date +%Y%m%d%H%M%S)")
           tags+=("${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-${GITHUB_SHA::7}")
 
-          echo "tags=$tags" >> $GITHUB_OUTPUT
+          echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
 
       - name: Build Image
         id: build-image
