@@ -8,15 +8,15 @@ sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,modular
 
 # nvidia 520.xxx and newer currently don't have a -$VERSIONxx suffix in their
 # package names
-if [[ "${NVIDIA_MAJOR_VERSION}" -ge 520 ]]; then
+if [[ "${NVIDIA_VERSION}" -ge 520 ]]; then
     NVIDIA_PACKAGE_NAME="nvidia"
 else
-    NVIDIA_PACKAGE_NAME="nvidia-${NVIDIA_MAJOR_VERSION}xx"
+    NVIDIA_PACKAGE_NAME="nvidia-${NVIDIA_VERSION}xx"
 fi
 
 rpm-ostree install \
-    akmod-${NVIDIA_PACKAGE_NAME}*:${NVIDIA_MAJOR_VERSION}.*.fc${RELEASE} \
-    xorg-x11-drv-${NVIDIA_PACKAGE_NAME}-{,cuda,devel,kmodsrc,power}*:${NVIDIA_MAJOR_VERSION}.*.fc${RELEASE} \
+    akmod-${NVIDIA_PACKAGE_NAME}*:${NVIDIA_VERSION}.*.fc${RELEASE} \
+    xorg-x11-drv-${NVIDIA_PACKAGE_NAME}-{,cuda,devel,kmodsrc,power}*:${NVIDIA_VERSION}.*.fc${RELEASE} \
     mock
 
 # alternatives cannot create symlinks on its own during a container build
@@ -55,7 +55,7 @@ cat <<EOF > /var/cache/akmods/nvidia-vars
 KERNEL_VERSION=${KERNEL_VERSION}
 RELEASE=${RELEASE}
 NVIDIA_PACKAGE_NAME=${NVIDIA_PACKAGE_NAME}
-NVIDIA_MAJOR_VERSION=${NVIDIA_MAJOR_VERSION}
+NVIDIA_MAJOR_VERSION=${NVIDIA_VERSION}
 NVIDIA_FULL_VERSION=${NVIDIA_FULL_VERSION}
 NVIDIA_AKMOD_VERSION=${NVIDIA_AKMOD_VERSION}
 NVIDIA_LIB_VERSION=${NVIDIA_LIB_VERSION}
