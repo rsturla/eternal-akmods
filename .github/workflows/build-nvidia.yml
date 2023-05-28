@@ -60,3 +60,6 @@ jobs:
           tags: ${{ steps.generate-meta.outputs.concat_tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NVIDIA_VERSION=${{ matrix.nvidia-version }}
+            FEDORA_VERSION=${{ matrix.fedora-version }}
