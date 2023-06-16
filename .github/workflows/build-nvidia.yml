@@ -6,6 +6,7 @@ on:
       - main
   schedule:
     - cron: '0 0,12 * * *'
+  pull_request:
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
@@ -58,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           file: nvidia/Containerfile
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.generate-meta.outputs.concat_tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
