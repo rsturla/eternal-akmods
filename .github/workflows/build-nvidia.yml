@@ -45,7 +45,6 @@ jobs:
           echo "concat_tags=$concat_tags" >> $GITHUB_OUTPUT
 
       - name: Fetch akmods signing key
-        if: ${{ github.event_name != 'pull_request' }}
         run: |
           echo "${{ secrets.AKMODS_PRIVATE_KEY }}" > /tmp/certs/eternal-akmods.priv
 
