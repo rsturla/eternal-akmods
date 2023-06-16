@@ -45,9 +45,8 @@ jobs:
           echo "concat_tags=$concat_tags" >> $GITHUB_OUTPUT
 
       - name: Fetch akmods signing key
-        if: ${{ github.event_name != 'pull_request' }}
         run: |
-          echo "${{ secrets.AKMODS_PRIVATE_KEY }}" > /tmp/certs/eternal-akmods.priv
+          echo "${{ secrets.AKMODS_PRIVATE_KEY }}" > _certs/eternal-akmods.priv
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
