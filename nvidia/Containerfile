@@ -10,8 +10,6 @@ COPY nvidia/scripts /tmp/scripts
 COPY nvidia/nvidia-addons.spec /tmp/nvidia-addons/nvidia-addons.spec
 COPY _certs /tmp/certs
 
-RUN ls -la /tmp/certs
-
 ADD https://nvidia.github.io/nvidia-docker/rhel9.0/nvidia-docker.repo \
     /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-runtime.repo
 ADD https://nvidia.github.io/nvidia-docker/rhel9.0/nvidia-docker.repo \

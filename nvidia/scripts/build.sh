@@ -25,9 +25,6 @@ rpm-ostree install \
 # alternatives cannot create symlinks on its own during a container build
 ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
 
-echo "ECHOING CONTENTS OF /tmp/certs"
-ls -la /tmp/certs
-
 if [[ ! -s "/tmp/certs/eternal-akmods.priv" ]]; then
     echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
     cp /tmp/certs/eternal-akmods.priv{.local,}
