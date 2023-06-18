@@ -66,6 +66,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           file: nvidia/Containerfile
+          context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.generate-meta.outputs.concat_tags }}
           cache-from: type=gha
