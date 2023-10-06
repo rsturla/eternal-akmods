@@ -23,7 +23,7 @@ Adds various runtime files for nvidia support. These include a key for importing
 %build
 install -Dm0644 %{SOURCE0} %{buildroot}%{_datadir}/eternal-linux/%{_sysconfdir}/pki/akmods/certs/eternal-akmods.der
 install -Dm0644 %{SOURCE1} %{buildroot}%{_datadir}/eternal-linux/%{_sysconfdir}/yum.repos.d/nvidia-container-toolkit.repo
-install -Dm0644 %{SOURCE3} %{buildroot}%{_datadir}/eternal-linux/%{_datadir}/selinux/packages/nvidia-container.pp
+install -Dm0644 %{SOURCE2} %{buildroot}%{_datadir}/eternal-linux/%{_datadir}/selinux/packages/nvidia-container.pp
 
 sed -i 's@enabled=1@enabled=0@g' %{buildroot}%{_datadir}/eternal-linux/%{_sysconfdir}/yum.repos.d/nvidia-container-toolkit.repo
 
