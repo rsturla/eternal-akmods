@@ -34,7 +34,6 @@ install -Dm0644 %{buildroot}%{_datadir}/eternal-linux/%{_datadir}/selinux/packag
 %files
 %attr(0644,root,root) %{_datadir}/eternal-linux/%{_sysconfdir}/pki/akmods/certs/eternal-akmods.der
 %attr(0644,root,root) %{_datadir}/eternal-linux/%{_sysconfdir}/yum.repos.d/nvidia-container-toolkit.repo
-%attr(0644,root,root) %{_datadir}/eternal-linux/%{_sysconfdir}/nvidia-container-toolkit/config-rootless.toml
 %attr(0644,root,root) %{_datadir}/eternal-linux/%{_datadir}/selinux/packages/nvidia-container.pp
 %attr(0644,root,root) %{_sysconfdir}/pki/akmods/certs/eternal-akmods.der
 %attr(0644,root,root) %{_sysconfdir}/yum.repos.d/nvidia-container-toolkit.repo
