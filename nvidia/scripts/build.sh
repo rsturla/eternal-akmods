@@ -49,7 +49,7 @@ akmods --force --kernels "${KERNEL_VERSION}" --kmod "${NVIDIA_PACKAGE_NAME}"
 modinfo /usr/lib/modules/${KERNEL_VERSION}/extra/${NVIDIA_PACKAGE_NAME}/nvidia{,-drm,-modeset,-peermem,-uvm}.ko.xz > /dev/null || \
 (cat /var/cache/akmods/${NVIDIA_PACKAGE_NAME}/${NVIDIA_AKMOD_VERSION}-for-${KERNEL_VERSION}.failed.log && exit 1)
 
-sed -i "s@gpgcheck=0@gpgcheck=1@" /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-runtime.repo
+sed -i "s@gpgcheck=0@gpgcheck=1@" /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-toolkit.repo
 
 install -D /etc/pki/akmods/certs/eternal-akmods.der /tmp/nvidia-addons/rpmbuild/SOURCES/eternal-akmods.der
 
