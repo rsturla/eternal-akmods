@@ -76,19 +76,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     needs: [build]
-    if: ${{ github.event_name == 'pull_request' }}
     steps:
-      - name: Output some debug information
-        run: |
-          cat $GITHUB_EVENT_PATH
-
-      - name: Check Matrix Job Status
-        id: matrix-status
-        run: |
-          if [ -z "$(jq -r '.jobs | map(select(.conclusion != "success")) | .[] | .conclusion' $GITHUB_EVENT_PATH)" ]; then
-            echo "All matrix jobs were successful."
-            exit 0
-          else
-            echo "One or more matrix jobs failed."
-            exit 1
-          fi
+      - name: Exit
+        shell: bash
+        run: exit 0
