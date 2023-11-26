@@ -1,5 +1,6 @@
 ARG FEDORA_VERSION=39
 ARG NVIDIA_VERSION=535
+ARG ENABLE_RPMFUSION_TESTING=false
 
 FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION} AS builder
 
