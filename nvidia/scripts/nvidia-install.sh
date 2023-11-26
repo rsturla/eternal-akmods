@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -ouex pipefail
+ENABLE_RPMFUSION_TESTING=false
 
 # Modularity repositories are not available on Fedora 39 and above, so don't try to disable them
 if [[ "${FEDORA_VERSION}" -lt 39 ]]; then
