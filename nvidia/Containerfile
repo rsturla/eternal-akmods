@@ -17,8 +17,8 @@ ADD https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-too
 ADD https://raw.githubusercontent.com/NVIDIA/dgx-selinux/master/bin/RHEL9/nvidia-container.pp \
     /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container.pp
 
-RUN /tmp/scripts/setup.sh
-RUN /tmp/scripts/build.sh
+RUN /tmp/scripts/nvidia-setup.sh
+RUN /tmp/scripts/nvidia-build.sh
 
 RUN rpm -ql /tmp/nvidia-addons/rpmbuild/RPMS/*/*.rpm
 
@@ -27,3 +27,5 @@ FROM scratch AS artifacts
 
 COPY --from=builder /var/cache /var/cache
 COPY --from=builder /tmp/nvidia-addons /tmp/nvidia-addons
+COPY --from=builder /tmp/scripts/nvidia-install.sh /tmp/scripts/nvidia-install.sh
+COPY --from=builder /tmp/scripts/nvidia-postinstall.sh /tmp/scripts/nvidia-postinstall.sh
