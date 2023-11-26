@@ -30,6 +30,5 @@ fi
 
 # If RPMFUSION_REPOSITORIES contains nonfree-updates-testing, enable the nonfree RPMFusion updates-testing repository
 if [[ "${RPMFUSION_REPOSITORIES[*]}" =~ "nonfree-updates-testing" ]]; then
-  rpm-ostree install "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora)-updates-testing.noarch.rpm"
-  rpm-ostree install rpmfusion-nonfree-release --uninstall rpmfusion-nonfree-release-$(rpm -E %fedora)-1.noarch
+  sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/rpmfusion-{free,nonfree}-updates-testing.repo
 fi
