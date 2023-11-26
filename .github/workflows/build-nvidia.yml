@@ -21,7 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         fedora-version: [38, 39]
-        nvidia-version: [535]
+        nvidia-version: [535, 545]
+        include:
+          - nvidia-version: 545
+            enable-rpmfusion-testing: true
 
     permissions:
       contents: read
@@ -72,6 +75,7 @@ jobs:
           build-args: |
             NVIDIA_VERSION=${{ matrix.nvidia-version }}
             FEDORA_VERSION=${{ matrix.fedora-version }}
+            ENABLE_RPMFUSION_TESTING=${{ matrix.enable-rpmfusion-testing }}
 
   check:
     runs-on: ubuntu-latest

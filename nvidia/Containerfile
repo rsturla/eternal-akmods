@@ -1,10 +1,12 @@
 ARG FEDORA_VERSION=39
 ARG NVIDIA_VERSION=535
+ARG ENABLE_RPMFUSION_TESTING=false
 
 FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION} AS builder
 
 ARG FEDORA_VERSION
 ARG NVIDIA_VERSION
+ARG ENABLE_RPMFUSION_TESTING
 
 COPY nvidia/scripts /tmp/scripts
 COPY nvidia/nvidia-addons.spec /tmp/nvidia-addons/nvidia-addons.spec
@@ -15,18 +17,7 @@ ADD https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-too
 ADD https://raw.githubusercontent.com/NVIDIA/dgx-selinux/master/bin/RHEL9/nvidia-container.pp \
     /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container.pp
 
-# Recently, akmods have been failing since they are calling dnf and/or yum which do not exist in the ostree image
-RUN ln -s /usr/bin/rpm-ostree /usr/bin/dnf
-
-RUN rpm-ostree install \
-  https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
-  https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm && \
-  rpm-ostree install \
-  rpmfusion-nonfree-release  \
-  rpmfusion-free-release  \
-  --uninstall=rpmfusion-free-release-$(rpm -E %fedora)-1.noarch  \
-  --uninstall=rpmfusion-nonfree-release-$(rpm -E %fedora)-1.noarch
-
+RUN /tmp/scripts/setup.sh
 RUN /tmp/scripts/build.sh
 
 RUN rpm -ql /tmp/nvidia-addons/rpmbuild/RPMS/*/*.rpm

@@ -3,21 +3,7 @@
 set -oeux pipefail
 
 RELEASE="$(rpm -E '%fedora.%_arch')"
-
-# Modularity repositories are not available on Fedora 39 and above, so don't try to disable them
-if [[ "${FEDORA_VERSION}" -lt 39 ]]; then
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,updates-modular}.repo
-else
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
-fi
-
-# nvidia 520.xxx and newer currently don't have a -$VERSIONxx suffix in their
-# package names
-if [[ "${NVIDIA_VERSION}" -ge 520 ]]; then
-    NVIDIA_PACKAGE_NAME="nvidia"
-else
-    NVIDIA_PACKAGE_NAME="nvidia-${NVIDIA_VERSION}xx"
-fi
+NVIDIA_PACKAGE_NAME="nvidia"
 
 rpm-ostree install \
     akmod-${NVIDIA_PACKAGE_NAME}*:${NVIDIA_VERSION}.*.fc${RELEASE} \
