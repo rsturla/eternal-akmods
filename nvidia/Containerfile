@@ -1,12 +1,12 @@
 ARG FEDORA_VERSION=39
 ARG NVIDIA_VERSION=535
-ARG ENABLE_RPMFUSION_TESTING=false
+ARG RPMFUSION_TESTING_ENABLED=false
 
 FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION} AS builder
 
 ARG FEDORA_VERSION
 ARG NVIDIA_VERSION
-ARG ENABLE_RPMFUSION_TESTING
+ARG RPMFUSION_TESTING_ENABLED
 
 COPY nvidia/scripts /tmp/scripts
 COPY nvidia/nvidia-addons.spec /tmp/nvidia-addons/nvidia-addons.spec
