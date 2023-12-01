@@ -19,7 +19,7 @@ rpm-ostree install \
   --uninstall rpmfusion-free-release-$(rpm -E %fedora)-1.noarch \
   --uninstall rpmfusion-nonfree-release-$(rpm -E %fedora)-1.noarch
 
-# If ENABLE_RPMFUSION_TESTING is set to true, enable the RPMFusion testing repos
-if [[ "${ENABLE_RPMFUSION_TESTING}" == "true" ]]; then
+# If RPMFUSION_TESTING_ENABLED is set to true, enable the RPMFusion testing repos
+if [[ "${RPMFUSION_TESTING_ENABLED}" == "true" ]]; then
   sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/rpmfusion-{free,nonfree}-updates-testing.repo
 fi
