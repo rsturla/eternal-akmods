@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora-version: [38, 39]
+        fedora-version: [38, 39, rawhide]
         nvidia-version: [535, 545]
 
     permissions:
