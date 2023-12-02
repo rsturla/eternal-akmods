@@ -2,11 +2,13 @@
 
 set -oeux pipefail
 
-# Disable repos that are not needed for the build to improve build times
-if [[ "${FEDORA_VERSION}" -lt 39 ]]; then
-  sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,updates-modular}.repo
+# Modularity repositories are not available on Fedora 39 and above, so don't try to disable them
+if [[ "${FEDORA_VERSION}" == "rawhide" ]]; then
+  sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,updates-modular,updates-testing-archive}.repo
+elif [[ "${FEDORA_VERSION}" -lt 39 ]]; then
+  sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,updates-modular,updates-testing-modular}.repo
 else
-  sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,updates-archive}.repo
+  sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,updates-archive,updates-testing-archive}.repo
 fi
 
 rpm-ostree install \
