@@ -2,8 +2,9 @@
 
 set -ouex pipefail
 
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/rpmfusion-{,non}free{,-updates,-updates-testing}.repo
-sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
+# Restore the original repo configuration
+cp -a /tmp/yum.repos.d /etc/yum.repos.d
+rm -rf /tmp/yum.repos.d
 
 semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
 
