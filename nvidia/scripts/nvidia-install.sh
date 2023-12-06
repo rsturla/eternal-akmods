@@ -3,6 +3,9 @@
 set -ouex pipefail
 source /var/cache/akmods/nvidia-vars
 
+# Create a backup of current repos
+cp -a /etc/yum.repos.d /tmp/yum.repos.d
+
 # Modularity repositories are not available on Fedora 39 and above, so don't try to disable them
 if [[ "${FEDORA_VERSION}" -lt 39 ]]; then
   sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,modular,updates-modular}.repo
