@@ -10,3 +10,5 @@ semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
 
 ln -s /usr/bin/ld.bfd /etc/alternatives/ld
 ln -s /etc/alternatives/ld /usr/bin/ld
+
+systemctl enable eternal-nvctk-cdi.service
