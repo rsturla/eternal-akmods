@@ -12,8 +12,8 @@ Supplements:    mokutil policycoreutils
 Source0:        eternal-akmods.der
 Source1:        nvidia-container-toolkit.repo
 Source2:        nvidia-container.pp
-Source4:        eternal-nvctk-cdi.service
-Source5:        70-eternal-nvctk-cdi.preset
+Source3:        eternal-nvctk-cdi.service
+Source4:        70-eternal-nvctk-cdi.preset
 
 %description
 Adds various runtime files for nvidia support. These include a key for importing with mokutil to enable secure boot for nvidia kernel modules
