@@ -10,6 +10,8 @@ ARG RPMFUSION_TESTING_ENABLED
 
 COPY nvidia/scripts /tmp/scripts
 COPY nvidia/nvidia-addons.spec /tmp/nvidia-addons/nvidia-addons.spec
+COPY nvidia/files/usr/lib/systemd/system/eternal-nvctk-cdi.service /tmp/nvidia-addons/rpmbuild/SOURCES/eternal-nvctk-cdi.service
+COPY nvidia/files/usr/lib/systemd/system-preset/01-eternal-nvctk-cdi.preset /tmp/nvidia-addons/rpmbuild/SOURCES/01-eternal-nvctk-cdi.preset
 COPY _certs /tmp/certs
 
 ADD https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo \
