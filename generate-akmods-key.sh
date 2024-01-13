@@ -22,5 +22,5 @@ podman run \
     "sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,modular,updates-modular,updates-archive}.repo && \
      rpm-ostree install akmods && \
      kmodgenca --auto && \
-     cp /etc/pki/akmods/private/private_key.priv eternal-akmods.priv.local && \
-     cp /etc/pki/akmods/certs/public_key.der eternal-akmods.der.local"
+     cp /etc/pki/akmods/private/private_key.priv private_key.priv.local && \
+     cp /etc/pki/akmods/certs/public_key.der public_key.der.local"

@@ -37,7 +37,7 @@ modinfo /usr/lib/modules/${KERNEL_VERSION}/extra/${NVIDIA_PACKAGE_NAME}/nvidia{,
 
 sed -i "s@gpgcheck=0@gpgcheck=1@" /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-toolkit.repo
 
-install -D /etc/pki/akmods/certs/eternal-akmods.der /tmp/nvidia-addons/rpmbuild/SOURCES/eternal-akmods.der
+install -D /etc/pki/akmods/certs/public_key.der /tmp/nvidia-addons/rpmbuild/SOURCES/public_key.der
 
 rpmbuild -ba \
     --define '_topdir /tmp/nvidia-addons/rpmbuild' \
