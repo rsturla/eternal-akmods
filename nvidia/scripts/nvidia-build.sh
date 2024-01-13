@@ -13,16 +13,16 @@ rpm-ostree install \
 # alternatives cannot create symlinks on its own during a container build
 ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
 
-if [[ ! -s "/tmp/certs/eternal-akmods.priv" ]]; then
+if [[ ! -s "/tmp/certs/private_key.priv" ]]; then
     echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
-    cp /tmp/certs/eternal-akmods.priv{.local,}
-    cp /tmp/certs/eternal-akmods.der{.local,}
+    cp /tmp/certs/private_key.priv{.local,}
+    cp /tmp/certs/public_key.der{.local,}
 else
     echo "Using production signing key."
 fi
 
-install -Dm644 /tmp/certs/eternal-akmods.der  /etc/pki/akmods/certs/eternal-akmods.der
-install -Dm644 /tmp/certs/eternal-akmods.priv /etc/pki/akmods/private/eternal-akmods.priv
+install -Dm644 /tmp/certs/public_key.der  /etc/pki/akmods/certs/public_key.der
+install -Dm644 /tmp/certs/private_key.priv /etc/pki/akmods/certs/private_key.priv
 
 # Either successfully build and install the kernel modules, or fail early with debug output
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
