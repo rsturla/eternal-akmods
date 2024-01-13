@@ -9,7 +9,7 @@ URL:            https://github.com/rsturla/eternal-linux/akmods/nvidia
 BuildArch:      noarch
 Supplements:    mokutil policycoreutils
 
-Source0:        eternal-akmods.der
+Source0:        public_key.der
 Source1:        nvidia-container-toolkit.repo
 Source2:        nvidia-container.pp
 Source3:        eternal-nvctk-cdi.service
