@@ -23,8 +23,12 @@ jobs:
         fedora-version: [38, 39]
         nvidia-version: [545, 550]
         include:
-          - nvidia-version: 550
+          - nvidia-version: 545
             rpmfusion-testing-enabled: true
+        exclude:
+          - fedora-version: 38
+            nvidia-version: 550
+            
 
     permissions:
       contents: read
