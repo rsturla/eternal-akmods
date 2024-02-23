@@ -21,7 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         fedora-version: [38, 39]
-        nvidia-version: [545]
+        nvidia-version: [545, 550]
+        include:
+          - nvidia-version: 550
+            rpmfusion-testing-enabled: true
 
     permissions:
       contents: read
