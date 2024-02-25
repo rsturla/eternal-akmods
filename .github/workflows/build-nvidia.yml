@@ -79,7 +79,7 @@ jobs:
           build-args: |
             NVIDIA_VERSION=${{ matrix.nvidia-version }}
             FEDORA_VERSION=${{ matrix.fedora-version }}
-            RPMFUSION_TESTING_ENABLED=${{ matrix.rpmfusion-testing-enabled }}
+            RPMFUSION_TESTING_ENABLED=${{ matrix.rpmfusion-testing-enabled && 'true' }}
 
   check:
     needs: [build]
