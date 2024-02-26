@@ -23,11 +23,8 @@ jobs:
         fedora-version: [38, 39]
         nvidia-version: [545, 550]
         include:
-          - nvidia-version: 545
+          - nvidia-version: 550
             rpmfusion-testing-enabled: true
-        exclude:
-          - fedora-version: 38
-            nvidia-version: 550
             
 
     permissions:
@@ -79,7 +76,7 @@ jobs:
           build-args: |
             NVIDIA_VERSION=${{ matrix.nvidia-version }}
             FEDORA_VERSION=${{ matrix.fedora-version }}
-            RPMFUSION_TESTING_ENABLED=${{ matrix.rpmfusion-testing-enabled && 'true' }}
+            RPMFUSION_TESTING_ENABLED=${{ matrix.rpmfusion-testing-enabled }}
 
   check:
     needs: [build]
