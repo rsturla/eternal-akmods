@@ -18,7 +18,7 @@ if [[ ! -s "/tmp/certs/private_key.priv" ]]; then
     cp /tmp/certs/private_key.priv{.local,}
     cp /tmp/certs/public_key.der{.local,}
 else
-    echo "Using production signing key."
+    echo "INFO: Using production signing key."
 fi
 
 install -Dm644 /tmp/certs/public_key.der  /etc/pki/akmods/certs/public_key.der

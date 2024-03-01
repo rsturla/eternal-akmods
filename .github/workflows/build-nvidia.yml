@@ -47,7 +47,7 @@ jobs:
 
       - name: Fetch akmods signing key
         run: |
-          echo "${{ secrets.AKMODS_PRIVATE_KEY }}" > _certs/eternal-akmods.priv
+          echo "${{ secrets.AKMODS_PRIVATE_KEY }}" > _certs/private_key.priv
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@0d103c3126aa41d772a8362f6aa67afac040f80c # v3
