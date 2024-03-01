@@ -2,4 +2,4 @@
 .vscode
 
 # Production private keys
-eternal-akmods.priv
+private_key.priv
