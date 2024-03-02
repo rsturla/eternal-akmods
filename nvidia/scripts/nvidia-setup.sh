@@ -21,7 +21,7 @@ rpm-ostree install \
 
 # If RPMFUSION_TESTING_ENABLED is set to true, enable the RPMFusion testing repos
 if [[ "${RPMFUSION_TESTING_ENABLED}" == "true" ]]; then
-  echo "INFO: Enabling RPMFusion testing repositories
+  echo "INFO: Enabling RPMFusion testing repositories"
   sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/rpmfusion-{free,nonfree}-updates-testing.repo
 fi
 
