@@ -1,12 +1,14 @@
 ARG FEDORA_VERSION=40
 ARG NVIDIA_VERSION=550
 ARG RPMFUSION_TESTING_ENABLED=false
+ARG COREOS_KERNEL="N/A"
 
 FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION} AS builder
 
 ARG FEDORA_VERSION
 ARG NVIDIA_VERSION
 ARG RPMFUSION_TESTING_ENABLED
+ARG COREOS_KERNEL
 
 COPY nvidia/scripts /tmp/scripts
 COPY nvidia/nvidia-addons.spec /tmp/nvidia-addons/nvidia-addons.spec
