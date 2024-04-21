@@ -87,7 +87,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NVIDIA_VERSION=${{ matrix.nvidia-version }}
-            FEDORA_VERSION=${{ matrix.fedora-version }}
+            FEDORA_VERSION=${{ env.FEDORA_VERSION }}
             RPMFUSION_TESTING_ENABLED=${{ matrix.rpmfusion-testing-enabled }}
             COREOS_KERNEL=${{ env.COREOS_KERNEL }}
 
