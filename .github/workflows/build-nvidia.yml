@@ -20,8 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora-version: [38, 39, 40]
+        fedora-version: [39, 40, stable]
         nvidia-version: [550]
+    env:
+      FEDORA_VERSION: ${{ matrix.fedora-version }}
+      COREOS_KERNEL: "N/A"
 
     permissions:
       contents: read
@@ -59,6 +62,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get CoreOS Kernel Information
+        if: ${{ env.FEDORA_VERSION == 'stable' || env.FEDORA_VERSION == 'testing' }}
+        uses: ./.github/actions/get-coreos-kernel
+        id: get-coreos-kernel
+        with:
+          coreos-stream: ${{ env.FEDORA_VERSION }}
+
+      - name: Set CoreOS Environment Variables
+        if: ${{ env.FEDORA_VERSION == 'stable' || env.FEDORA_VERSION == 'testing' }}
+        run: |
+          echo "COREOS_KERNEL=${{ steps.get-coreos-kernel.outputs.coreos-kernel-release }}" >> $GITHUB_ENV
+          echo "FEDORA_VERSION=${{ steps.get-coreos-kernel.outputs.coreos-repo-version }}" >> $GITHUB_ENV
+
       - name: Build Image
         id: build-image
         uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5
@@ -73,6 +89,7 @@ jobs:
             NVIDIA_VERSION=${{ matrix.nvidia-version }}
             FEDORA_VERSION=${{ matrix.fedora-version }}
             RPMFUSION_TESTING_ENABLED=${{ matrix.rpmfusion-testing-enabled }}
+            COREOS_KERNEL=${{ env.COREOS_KERNEL }}
 
   check:
     needs: [build]
