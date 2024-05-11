@@ -23,7 +23,7 @@ install -D /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-toolkit.repo \
   /etc/yum.repos.d/nvidia-container-toolkit.repo
 
 rpm-ostree install \
-  xorg-x11-drv-${NVIDIA_PACKAGE_NAME}-{,cuda-,devel-,kmodsrc-,power-}${NVIDIA_FULL_VERSION} \
+  xorg-x11-drv-nvidia-{,cuda-,devel-,kmodsrc-,power-}${NVIDIA_FULL_VERSION} \
   nvidia-container-toolkit nvidia-vaapi-driver \
-  /var/cache/akmods/${NVIDIA_PACKAGE_NAME}/kmod-${NVIDIA_PACKAGE_NAME}-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc${RELEASE}.rpm \
+  /var/cache/akmods/nvidia-open/kmod-nvidia-open-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc${RELEASE}.rpm \
   /tmp/nvidia-addons/rpmbuild/RPMS/noarch/nvidia-addons-*.rpm
