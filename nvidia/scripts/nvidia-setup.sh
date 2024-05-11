@@ -27,7 +27,7 @@ rpm-ostree install \
   "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
 
 rpm-ostree install \
-  rpmfusion-free-release-tainted \
+  rpmfusion-free-release \
   rpmfusion-nonfree-release-tainted \
   --uninstall rpmfusion-free-release-$(rpm -E %fedora)-1.noarch \
   --uninstall rpmfusion-nonfree-release-$(rpm -E %fedora)-1.noarch
