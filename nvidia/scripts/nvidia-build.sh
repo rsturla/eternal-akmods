@@ -3,7 +3,6 @@
 set -oeux pipefail
 
 RELEASE="$(rpm -E '%fedora.%_arch')"
-NVIDIA_PACKAGE_NAME="nvidia"
 
 rpm-ostree install \
     akmod-nvidia-open*:${NVIDIA_VERSION}.*.fc${RELEASE} \
@@ -32,8 +31,8 @@ NVIDIA_FULL_VERSION="$(rpm -q "xorg-x11-drv-nvidia" --queryformat '%{EPOCH}:%{VE
 
 akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia-open"
 
-modinfo /usr/lib/modules/${KERNEL_VERSION}/extra/nvidia/nvidia{,-drm,-modeset,-peermem,-uvm}.ko.xz > /dev/null || \
-(cat /var/cache/akmods/nvidia/${NVIDIA_AKMOD_VERSION}-for-${KERNEL_VERSION}.failed.log && exit 1)
+modinfo /usr/lib/modules/${KERNEL_VERSION}/extra/nvidia-open/nvidia{,-drm,-modeset,-peermem,-uvm}.ko.xz > /dev/null || \
+(cat /var/cache/akmods/nvidia-open/${NVIDIA_AKMOD_VERSION}-for-${KERNEL_VERSION}.failed.log && exit 1)
 
 sed -i "s@gpgcheck=0@gpgcheck=1@" /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-toolkit.repo
 
