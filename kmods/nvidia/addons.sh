@@ -25,3 +25,4 @@ rpmbuild -ba \
     /tmp/nvidia-addons/nvidia-addons.spec
 
 rpm -ql /tmp/nvidia-addons/rpmbuild/RPMS/*/*.rpm
+mv /tmp/nvidia-addons/rpmbuild/RPMS/*/*.rpm /var/cache/rpms
