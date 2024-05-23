@@ -48,8 +48,5 @@ install -Dm0644 %{buildroot}%{_datadir}/eternal-linux/%{_unitdir}/eternal-nvctk-
 %attr(0644,root,root) %{_presetdir}/01-eternal-nvctk-cdi.preset
 
 %changelog
-* Mon Dec 11 2023 Robert Sturla <robertsturla@outlook.com>
-- add eternal-nvctk-cdi service to autogenerate Nvidia CDI device files
-
-* Sat May 27 2023 Robert Sturla <robertsturla@outlook.com>
+* Sat May 24 2024 Robert Sturla <robertsturla@outlook.com>
 - Initial build
