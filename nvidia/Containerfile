@@ -16,20 +16,18 @@ COPY nvidia/files/usr/lib/systemd/system/eternal-nvctk-cdi.service /tmp/nvidia-a
 COPY nvidia/files/usr/lib/systemd/system-preset/01-eternal-nvctk-cdi.preset /tmp/nvidia-addons/rpmbuild/SOURCES/01-eternal-nvctk-cdi.preset
 COPY _certs /tmp/certs
 
-ADD https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo \
-    /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-toolkit.repo
-ADD https://raw.githubusercontent.com/NVIDIA/dgx-selinux/master/bin/RHEL9/nvidia-container.pp \
-    /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container.pp
-
+RUN chmod +x /tmp/scripts/*.sh
 RUN /tmp/scripts/nvidia-setup.sh
 RUN /tmp/scripts/nvidia-build.sh
+RUN /tmp/scripts/nvidia-addons-build.sh
+RUN /tmp/scripts/nvidia-postbuild.sh
 
-RUN rpm -ql /tmp/nvidia-addons/rpmbuild/RPMS/*/*.rpm
+RUN rpm -ql /rpms/*.rpm
 
 
 FROM scratch AS artifacts
 
-COPY --from=builder /var/cache /var/cache
-COPY --from=builder /tmp/nvidia-addons /tmp/nvidia-addons
-COPY --from=builder /tmp/scripts/nvidia-install.sh /tmp/scripts/nvidia-install.sh
-COPY --from=builder /tmp/scripts/nvidia-postinstall.sh /tmp/scripts/nvidia-postinstall.sh
+COPY --from=builder /rpms /rpms
+COPY --from=builder /tmp/scripts/nvidia-install.sh /scripts/install.sh
+COPY --from=builder /tmp/scripts/nvidia-postinstall.sh /scripts/postinstall.sh
+COPY --from=builder /var/cache/akmods/nvidia-vars /info/nvidia-vars

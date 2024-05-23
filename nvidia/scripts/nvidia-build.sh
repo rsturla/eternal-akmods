@@ -34,15 +34,6 @@ akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
 modinfo /usr/lib/modules/${KERNEL_VERSION}/extra/nvidia/nvidia{,-drm,-modeset,-peermem,-uvm}.ko.xz > /dev/null || \
 (cat /var/cache/akmods/nvidia/${NVIDIA_AKMOD_VERSION}-for-${KERNEL_VERSION}.failed.log && exit 1)
 
-sed -i "s@gpgcheck=0@gpgcheck=1@" /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-toolkit.repo
-
-install -D /etc/pki/akmods/certs/public_key.der /tmp/nvidia-addons/rpmbuild/SOURCES/public_key.der
-
-rpmbuild -ba \
-    --define '_topdir /tmp/nvidia-addons/rpmbuild' \
-    --define '%_tmppath %{_topdir}/tmp' \
-    /tmp/nvidia-addons/nvidia-addons.spec
-
 cat <<EOF > /var/cache/akmods/nvidia-vars
 KERNEL_VERSION=${KERNEL_VERSION}
 RELEASE=${RELEASE}
