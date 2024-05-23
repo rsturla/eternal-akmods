@@ -3,7 +3,7 @@
 set -oeux pipefail
 
 RPMBUILD_DIR="/tmp/nvidia-addons/rpmbuild"
-RPMBUILD_SOURCES_DIR="${RPMBUILD}/SOURCES"
+RPMBUILD_SOURCES_DIR="${RPMBUILD_DIR}/SOURCES"
 curl -Lo ${RPMBUILD_SOURCES_DIR}/nvidia-container-toolkit.repo https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
 curl -Lo ${RPMBUILD_SOURCES_DIR}/nvidia-container.pp https://raw.githubusercontent.com/NVIDIA/dgx-selinux/master/bin/RHEL9/nvidia-container.pp
 
