@@ -12,6 +12,6 @@ sed -i "s@gpgcheck=0@gpgcheck=1@" ${RPMBUILD_SOURCES_DIR}/nvidia-container-toolk
 install -D /etc/pki/akmods/certs/public_key.der ${RPMBUILD_SOURCES_DIR}/public_key.der
 
 rpmbuild -ba \
-    --define '_topdir ${RPMBUILD_DIR}' \
+    --define '_topdir /tmp/nvidia-addons/rpmbuild' \
     --define '%_tmppath %{_topdir}/tmp' \
     /tmp/nvidia-addons/nvidia-addons.spec
