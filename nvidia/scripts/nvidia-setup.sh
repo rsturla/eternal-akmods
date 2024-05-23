@@ -3,11 +3,7 @@
 set -oeux pipefail
 
 # Disable repos that are not needed for the build to improve build times
-if [[ "${FEDORA_VERSION}" -lt 39 ]]; then
-  sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-{cisco-openh264,updates-modular}.repo
-else
-  sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
-fi
+sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
 
 # If COREOS_KERNEL is not set to 'N/A', replace the kernel with the specified version
 if [[ "${COREOS_KERNEL}" != "N/A" ]]; then
