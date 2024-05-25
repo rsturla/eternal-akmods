@@ -21,7 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         fedora-version: [39, 40, stable]
-        nvidia-version: [550]
+        nvidia-version: [550, 555]
+        include:
+          - nvidia-version: 555
+            rpmfusion-testing-enabled: true
     env:
       FEDORA_VERSION: ${{ matrix.fedora-version }}
       COREOS_KERNEL: "N/A"
