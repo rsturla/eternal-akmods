@@ -25,6 +25,8 @@ RUN rpm -ql /rpms/*.rpm
 
 FROM scratch AS artifacts
 
+ARG KMOD_NAME
+
 COPY kmods/${KMOD_NAME}/scripts/install /tmp/scripts
 COPY --from=builder /rpms /rpms
 COPY --from=builder /var/cache/akmods/nvidia-vars /info/nvidia-vars
