@@ -16,11 +16,12 @@ COPY nvidia/files/usr/lib/systemd/system/eternal-nvctk-cdi.service /tmp/nvidia-a
 COPY nvidia/files/usr/lib/systemd/system-preset/01-eternal-nvctk-cdi.preset /tmp/nvidia-addons/rpmbuild/SOURCES/01-eternal-nvctk-cdi.preset
 COPY _certs /tmp/certs
 
-RUN chmod +x /tmp/scripts/*.sh
-RUN /tmp/scripts/nvidia-setup.sh
-RUN /tmp/scripts/nvidia-build.sh
-RUN /tmp/scripts/nvidia-addons-build.sh
-RUN /tmp/scripts/nvidia-postbuild.sh
+RUN chmod +x /tmp/scripts/build/*.sh && \
+  chmod +x /tmp/scripts/install/*.sh
+RUN /tmp/scripts/build/00-prebuild.sh
+RUN /tmp/scripts/build/01-build.sh
+RUN /tmp/scripts/build/02-addons-build.sh
+RUN /tmp/scripts/build/03-postbuild.sh
 
 RUN rpm -ql /rpms/*.rpm
 
@@ -28,7 +29,5 @@ RUN rpm -ql /rpms/*.rpm
 FROM scratch AS artifacts
 
 COPY --from=builder /rpms /rpms
-COPY --from=builder /tmp/scripts/nvidia-preinstall.sh /scripts/00-preinstall.sh
-COPY --from=builder /tmp/scripts/nvidia-install.sh /scripts/01-install.sh
-COPY --from=builder /tmp/scripts/nvidia-postinstall.sh /scripts/02-postinstall.sh
+COPY --from=builder /tmp/scripts/install /scripts/
 COPY --from=builder /var/cache/akmods/nvidia-vars /info/nvidia-vars
