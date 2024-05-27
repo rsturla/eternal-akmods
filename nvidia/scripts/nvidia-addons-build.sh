@@ -15,3 +15,6 @@ rpmbuild -ba \
     --define '_topdir /tmp/nvidia-addons/rpmbuild' \
     --define '%_tmppath %{_topdir}/tmp' \
     /tmp/nvidia-addons/nvidia-addons.spec
+
+mkdir -p /var/cache/rpms
+cp /tmp/nvidia-addons/rpmbuild/RPMS/noarch/*.rpm /var/cache/rpms
