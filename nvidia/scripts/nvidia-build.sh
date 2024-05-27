@@ -6,22 +6,7 @@ RELEASE="$(rpm -E '%fedora.%_arch')"
 
 rpm-ostree install \
     akmod-nvidia*:${NVIDIA_VERSION}.*.fc${RELEASE} \
-    xorg-x11-drv-nvidia-{,cuda,devel,kmodsrc,power}*:${NVIDIA_VERSION}.*.fc${RELEASE} \
-    mock
-
-# alternatives cannot create symlinks on its own during a container build
-ln -s /usr/bin/ld.bfd /etc/alternatives/ld && ln -s /etc/alternatives/ld /usr/bin/ld
-
-if [[ ! -s "/tmp/certs/private_key.priv" ]]; then
-    echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
-    cp /tmp/certs/private_key.priv{.local,}
-    cp /tmp/certs/public_key.der{.local,}
-else
-    echo "INFO: Using production signing key."
-fi
-
-install -Dm644 /tmp/certs/public_key.der  /etc/pki/akmods/certs/public_key.der
-install -Dm644 /tmp/certs/private_key.priv /etc/pki/akmods/certs/private_key.priv
+    xorg-x11-drv-nvidia-{,cuda,devel,kmodsrc,power}*:${NVIDIA_VERSION}.*.fc${RELEASE}
 
 # Either successfully build and install the kernel modules, or fail early with debug output
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
@@ -33,15 +18,6 @@ akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
 
 modinfo /usr/lib/modules/${KERNEL_VERSION}/extra/nvidia/nvidia{,-drm,-modeset,-peermem,-uvm}.ko.xz > /dev/null || \
 (cat /var/cache/akmods/nvidia/${NVIDIA_AKMOD_VERSION}-for-${KERNEL_VERSION}.failed.log && exit 1)
-
-sed -i "s@gpgcheck=0@gpgcheck=1@" /tmp/nvidia-addons/rpmbuild/SOURCES/nvidia-container-toolkit.repo
-
-install -D /etc/pki/akmods/certs/public_key.der /tmp/nvidia-addons/rpmbuild/SOURCES/public_key.der
-
-rpmbuild -ba \
-    --define '_topdir /tmp/nvidia-addons/rpmbuild' \
-    --define '%_tmppath %{_topdir}/tmp' \
-    /tmp/nvidia-addons/nvidia-addons.spec
 
 cat <<EOF > /var/cache/akmods/nvidia-vars
 KERNEL_VERSION=${KERNEL_VERSION}
