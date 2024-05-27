@@ -1,4 +1,4 @@
-name: Build Nvidia akmods cache
+name: Build kmods
 
 on:
   push:
@@ -11,20 +11,20 @@ on:
 
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
-  IMAGE_NAME: akmods-nvidia
 
 jobs:
   build:
-    name: Build Nvidia akmods cache
+    name: Build kmods
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        fedora-version: [39, 40, stable]
-        nvidia-version: [550]
+        fedora-version: [39, 40]
+        kmod-name: [nvidia]
+        kmod-version: [550]
     env:
+      IMAGE_NAME: akmods/${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
-      COREOS_KERNEL: "N/A"
 
     permissions:
       contents: read
@@ -40,9 +40,9 @@ jobs:
         shell: bash
         run: |
           tags=()
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-$(date +%Y%m%d%H%M%S)")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.nvidia-version }}-${GITHUB_SHA::7}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}-$(date +%Y%m%d%H%M%S)")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}-${GITHUB_SHA::7}")
 
           echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
           concat_tags=$(IFS=, ; echo "${tags[*]}")
@@ -62,34 +62,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get CoreOS Kernel Information
-        if: ${{ env.FEDORA_VERSION == 'stable' || env.FEDORA_VERSION == 'testing' }}
-        uses: rsturla/eternal-main/.github/actions/get-coreos-kernel@main
-        id: get-coreos-kernel
-        with:
-          coreos-stream: ${{ env.FEDORA_VERSION }}
-
-      - name: Set CoreOS Environment Variables
-        if: ${{ env.FEDORA_VERSION == 'stable' || env.FEDORA_VERSION == 'testing' }}
-        run: |
-          echo "COREOS_KERNEL=${{ steps.get-coreos-kernel.outputs.coreos-kernel-release }}" >> $GITHUB_ENV
-          echo "FEDORA_VERSION=${{ steps.get-coreos-kernel.outputs.coreos-repo-version }}" >> $GITHUB_ENV
-
       - name: Build Image
         id: build-image
         uses: docker/build-push-action@2cdde995de11925a030ce8070c3d77a52ffcf1c0 # v5
         with:
-          file: nvidia/Containerfile
+          file: ./Containerfile
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.generate-meta.outputs.concat_tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            NVIDIA_VERSION=${{ matrix.nvidia-version }}
+            KMOD_NAME=${{ matrix.kmod-name }}
+            KMOD_VERSION=${{ matrix.kmod-version }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
-            RPMFUSION_TESTING_ENABLED=${{ matrix.rpmfusion-testing-enabled }}
-            COREOS_KERNEL=${{ env.COREOS_KERNEL }}
 
   check:
     needs: [build]
