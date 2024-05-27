@@ -1,12 +1,14 @@
 ARG FEDORA_VERSION=40
 ARG KMOD_NAME=nvidia
 ARG KMOD_VERSION=550
+ARG KERNEL_VERSION="N/A"
 
 FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION} AS builder
 
 ARG FEDORA_VERSION
 ARG KMOD_NAME
 ARG KMOD_VERSION
+ARG KERNEL_VERSION
 
 COPY _certs /tmp/certs
 COPY _scripts /tmp/scripts
