@@ -4,7 +4,7 @@ set -oeux pipefail
 
 # Copy all built RPMs to /rpms
 mkdir -p /rpms
-for rpm in $(find /var/cache/akmods -name '*.rpm'); do
+for rpm in $(find /var/cache -name '*.rpm'); do
   cp -a $rpm /rpms
 done
 
