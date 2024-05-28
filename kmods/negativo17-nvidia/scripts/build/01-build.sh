@@ -3,12 +3,11 @@
 set -oeux pipefail
 
 RELEASE="$(rpm -E '%fedora.%_arch')"
-ARCH="$(rpm -E '%_arch')"
 
 
 # Build NVIDIA drivers
 rpm-ostree install \
-    akmod-nvidia-*:${KMOD_VERSION}.*.fc${RELEASE}.${ARCH}
+    akmod-nvidia-*:${KMOD_VERSION}.*.fc${RELEASE}
 
 KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
