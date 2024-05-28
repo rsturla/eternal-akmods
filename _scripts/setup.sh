@@ -15,8 +15,8 @@ sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/fedora-updates-archive.repo
 # enable RPMs with alternatives to create them in this image build
 mkdir -p /var/lib/alternatives
 
-# If KERNEL_VERSION is not "N/A", install that version of the kernel
-if [[ "${KERNEL_VERSION}" != "N/A" ]]; then
+# If KERNEL_VERSION is not empty, install that kernel
+if [[ "${KERNEL_VERSION}" != "" ]]; then
   KERNEL_VERSION="${KERNEL_VERSION}"
   KERNEL_MAJOR_MINOR_PATCH=$(echo "${KERNEL_VERSION}" | cut -d '-' -f 1)
   KERNEL_RELEASE=$(echo "${KERNEL_VERSION}" | cut -d '-' -f 2)
