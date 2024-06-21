@@ -1,0 +1,28 @@
+ARG FEDORA_VERSION=40
+ARG KMOD_NAME=nvidia
+ARG KMOD_IMAGE=${KMOD_NAME}-kmod
+ARG KMOD_TAG=latest
+
+FROM ${KMOD_IMAGE}:${KMOD_TAG} as kmod-cache
+FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION}
+
+RUN rpm-ostree install \
+  https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
+  https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+RUN rpm-ostree install \
+  rpmfusion-nonfree-release  \
+  rpmfusion-free-release  \
+  --uninstall=rpmfusion-free-release-$(rpm -E %fedora)-1.noarch  \
+  --uninstall=rpmfusion-nonfree-release-$(rpm -E %fedora)-1.noarch
+
+RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/fedora-{updates-archive,cisco-openh264}.repo
+
+COPY --from=kmod-cache /rpms /tmp/akmods/rpms
+COPY --from=kmod-cache /info /tmp/akmods/info
+COPY --from=kmod-cache /scripts /tmp/akmods/scripts
+
+RUN chmod +x /tmp/akmods/scripts/*.sh && \
+  /tmp/akmods/scripts/00-preinstall.sh && \
+  /tmp/akmods/scripts/01-install.sh && \
+  /tmp/akmods/scripts/02-postinstall.sh
