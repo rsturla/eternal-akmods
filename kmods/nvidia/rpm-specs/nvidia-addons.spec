@@ -32,6 +32,7 @@ install -Dm0644 %{SOURCE4} %{buildroot}%{_datadir}/eternal-linux/%{_unitdir}/ete
 install -Dm0644 %{SOURCE5} %{buildroot}%{_presetdir}/01-eternal-nvctk-cdi.preset
 
 sed -i 's@enabled=1@enabled=0@g' %{buildroot}%{_datadir}/eternal-linux/%{_sysconfdir}/yum.repos.d/nvidia-container-toolkit.repo
+sed -i 's@enabled=1@enabled=0@g' %{buildroot}%{_datadir}/eternal-linux/%{_sysconfdir}/yum.repos.d/negativo17-fedora-nvidia.repo
 
 install -Dm0644 %{buildroot}%{_datadir}/eternal-linux/%{_sysconfdir}/yum.repos.d/negativo17-fedora-nvidia.repo     %{buildroot}%{_sysconfdir}/yum.repos.d/negativo17-fedora-nvidia.repo
 install -Dm0644 %{buildroot}%{_datadir}/eternal-linux/%{_sysconfdir}/pki/akmods/certs/eternal-akmods.der           %{buildroot}%{_sysconfdir}/pki/akmods/certs/eternal-akmods.der
