@@ -28,6 +28,8 @@ if [[ "${KERNEL_VERSION}" != "" ]]; then
     "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-modules-extra-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm"
 fi
 
+rpm-ostree install fedora-repos-archive
+
 rpm-ostree install \
   akmods \
   mock
