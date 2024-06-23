@@ -28,7 +28,19 @@ if [[ "${KERNEL_VERSION}" != "" ]]; then
     "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-modules-extra-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm"
 fi
 
-rpm-ostree install fedora-repos-archive
+rpm-ostree install \
+  "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" \
+  "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" \
+  fedora-repos-archive
+
+rpm-ostree install \
+  rpmfusion-free-release \
+  rpmfusion-nonfree-release \
+  --uninstall rpmfusion-free-release-$(rpm -E %fedora)-1.noarch \
+  --uninstall rpmfusion-nonfree-release-$(rpm -E %fedora)-1.noarch
+
+curl -LsSf -o /etc/yum.repos.d/fedora-coreos-pool.repo \
+    https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
 
 rpm-ostree install \
   akmods \
