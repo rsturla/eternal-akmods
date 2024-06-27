@@ -1,5 +1,5 @@
 Name:           nvidia-addons
-Version:        0.3
+Version:        0.4
 Release:        1%{?dist}
 Summary:        Additional files for nvidia driver support
 
