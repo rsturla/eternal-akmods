@@ -28,6 +28,9 @@ if [[ "${KERNEL_VERSION}" != "" ]]; then
     "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-modules-extra-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm"
 fi
 
+curl -LsSf -o /etc/yum.repos.d/fedora-coreos-pool.repo \
+    https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
+
 rpm-ostree install \
   akmods \
   mock
