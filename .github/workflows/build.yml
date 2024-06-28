@@ -43,7 +43,7 @@ jobs:
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}")
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}-$(date +%Y%m%d%H%M%S)")
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}-${GITHUB_SHA::7}")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}"
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}")
 
           echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
           concat_tags=$(IFS=, ; echo "${tags[*]}")
