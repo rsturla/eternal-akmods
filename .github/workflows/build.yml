@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0,12 * * *'
+    - cron: "0 0,12 * * *"
   pull_request:
   workflow_dispatch:
 
@@ -87,7 +87,6 @@ jobs:
           build-args: |
             KMOD_NAME=${{ matrix.kmod-name }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
-            KERNEL_VERSION=${{ env.COREOS_KERNEL }}
             REPOSITORY_TYPE=${{ matrix.repository-type }}
 
   check:

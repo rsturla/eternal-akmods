@@ -1,15 +1,15 @@
 ARG FEDORA_VERSION=40
 ARG KMOD_NAME=nvidia
 ARG KMOD_VERSION=
-ARG KERNEL_VERSION=
+ARG KERNEL_FLAVOR=stable
 ARG REPOSITORY_TYPE=release
 
-FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION} AS builder
+FROM quay.io/fedora/fedora:${FEDORA_VERSION} AS builder
 
 ARG FEDORA_VERSION
 ARG KMOD_NAME
 ARG KMOD_VERSION
-ARG KERNEL_VERSION
+ARG KERNEL_FLAVOR
 ARG REPOSITORY_TYPE
 
 COPY _certs /tmp/certs
@@ -19,6 +19,7 @@ COPY kmods/${KMOD_NAME}/rpm-specs /tmp/rpm-specs
 COPY kmods/${KMOD_NAME}/files /tmp/files
 
 RUN chmod +x /tmp/scripts/*.sh && \
+    /tmp/scripts/replace-kernel.sh ${KERNEL_FLAVOR} && \
     /tmp/scripts/setup.sh && \
     /tmp/scripts/00-prebuild.sh && \
     /tmp/scripts/01-build.sh && \

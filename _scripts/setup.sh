@@ -9,33 +9,22 @@ set -oeux pipefail
 ARCH="$(rpm -E '%_arch')"
 RELEASE="$(rpm -E '%fedora')"
 
+dnf install -y fedora-repos-archive
+
 sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/fedora-updates-archive.repo
 
 # enable RPMs with alternatives to create them in this image build
 mkdir -p /var/lib/alternatives
 
-# If KERNEL_VERSION is not empty, install that kernel
-if [[ "${KERNEL_VERSION}" != "" ]]; then
-  KERNEL_VERSION="${KERNEL_VERSION}"
-  KERNEL_MAJOR_MINOR_PATCH=$(echo "${KERNEL_VERSION}" | cut -d '-' -f 1)
-  KERNEL_RELEASE=$(echo "${KERNEL_VERSION}" | cut -d '-' -f 2)
-  rpm-ostree override replace --experimental \
-    "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm" \
-    "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-core-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm" \
-    "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-modules-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm" \
-    "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-modules-core-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm" \
-    "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-modules-extra-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm"
-fi
+# curl -LsSf -o /etc/yum.repos.d/fedora-coreos-pool.repo \
+#     https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
 
-curl -LsSf -o /etc/yum.repos.d/fedora-coreos-pool.repo \
-    https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
-
-rpm-ostree install \
+dnf install -y \
   kernel-devel \
   kernel-devel-matched
 
-rpm-ostree install \
+dnf install -y \
   akmods \
   mock
 
