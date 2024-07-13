@@ -5,10 +5,10 @@ set -oeux pipefail
 RELEASE="$(rpm -E '%fedora.%_arch')"
 
 # Build NVIDIA drivers
-rpm-ostree install \
+dnf install -y \
     akmod-nvidia*.fc${RELEASE}
 
-KERNEL_VERSION="$(rpm -q kernel --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
+KERNEL_VERSION="$(rpm -q kernel-core --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 
 # Change to the open source kernel module

@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0,12 * * *'
+    - cron: "0 0,12 * * *"
   pull_request:
   workflow_dispatch:
 
@@ -86,9 +86,8 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             KMOD_NAME=${{ matrix.kmod-name }}
+            FEDORA_KERNEL_FLAVOR=${{ matrix.fedora-version }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
-            KERNEL_VERSION=${{ env.COREOS_KERNEL }}
-            REPOSITORY_TYPE=${{ matrix.repository-type }}
 
   check:
     needs: [build]
