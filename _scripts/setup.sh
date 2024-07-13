@@ -21,10 +21,6 @@ mkdir -p /var/lib/alternatives
 #     https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
 
 dnf install -y \
-  kernel-devel \
-  kernel-devel-matched
-
-dnf install -y \
   akmods \
   mock
 
