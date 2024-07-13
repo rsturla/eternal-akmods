@@ -86,6 +86,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             KMOD_NAME=${{ matrix.kmod-name }}
+            FEDORA_KERNEL_FLAVOR=${{ matrix.fedora-version }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
             REPOSITORY_TYPE=${{ matrix.repository-type }}
 
