@@ -2,29 +2,19 @@
 
 set -euox pipefail
 
-# Replace the kernel with the one from the Fedora repository
 FEDORA_KERNEL_FLAVOR="${FEDORA_KERNEL_FLAVOR}"
 
 dnf install -y dnf-plugins-core rpmrebuild sbsigntools openssl skopeo jq
 
 # <major>.<minor>.<patch>-<num>.fc<fedora_version>.<arch>
 FEDORA_KERNEL_VERSION=$(skopeo inspect docker://quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION} | jq -r '.Labels["ostree.linux"]')
-# Extract num (100, 200, 300) from the Fedora version (e.g. # 3.2.1-100-fc34.x86_64 -> 100)
-FEDORA_VERSION_NUM=$(echo "$FEDORA_KERNEL_VERSION" | cut -d - -f 2 | cut -d . -f 1)
-
 
 case "$FEDORA_KERNEL_FLAVOR" in
   "stable")
     KERNEL_VERSION=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
-    # Replace num with the Fedora version num
-    COREOS_VERSION_NUM=$(echo "$KERNEL_VERSION" | cut -d - -f 2 | cut -d . -f 1)
-    # KERNEL_VERSION=$(echo "$KERNEL_VERSION" | sed "s/$COREOS_VERSION_NUM/$FEDORA_VERSION_NUM/")
     ;;
   "testing")
     KERNEL_VERSION=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:testing | jq -r '.Labels["ostree.linux"]')
-    # Replace num with the Fedora version num
-    COREOS_VERSION_NUM=$(echo "$KERNEL_VERSION" | cut -d - -f 2 | cut -d . -f 1)
-    # KERNEL_VERSION=$(echo "$KERNEL_VERSION" | sed "s/$COREOS_VERSION_NUM/$FEDORA_VERSION_NUM/")
     ;;
   *)
     KERNEL_VERSION=${FEDORA_KERNEL_VERSION}

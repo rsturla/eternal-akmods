@@ -17,9 +17,6 @@ sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/fedora-updates-archive.repo
 # enable RPMs with alternatives to create them in this image build
 mkdir -p /var/lib/alternatives
 
-# curl -LsSf -o /etc/yum.repos.d/fedora-coreos-pool.repo \
-#     https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing-devel/fedora-coreos-pool.repo
-
 dnf install -y \
   akmods \
   mock
