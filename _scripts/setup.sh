@@ -28,11 +28,6 @@ if [[ "${KERNEL_VERSION}" != "" ]]; then
     "https://kojipkgs.fedoraproject.org//packages/kernel/${KERNEL_MAJOR_MINOR_PATCH}/${KERNEL_RELEASE}/x86_64/kernel-modules-extra-${KERNEL_MAJOR_MINOR_PATCH}-${KERNEL_RELEASE}.x86_64.rpm"
 fi
 
-curl -LsSf -o /etc/yum.repos.d/fedora-coreos-pool.repo \
-    https://raw.githubusercontent.com/coreos/fedora-coreos-config/testing/fedora-coreos-pool.repo
-
-rpm-ostree cliwrap install-to-root /
-
 rpm-ostree install \
   kernel-devel \
   kernel-devel-matched
@@ -41,11 +36,7 @@ rpm-ostree install \
   akmods \
   mock
 
-rpm-ostree override remove \
-  dnf \
-  dnf-data \
-  dnf-utils \
-  dnf-plugins-core
+rpm-ostree cliwrap install-to-root /
 
 if [[ ! -s "/tmp/certs/private_key.priv" ]]; then
     echo "WARNING: Using test signing key. Run './generate-akmods-key' for production builds."
