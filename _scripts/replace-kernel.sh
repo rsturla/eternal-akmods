@@ -3,11 +3,11 @@
 set -euox pipefail
 
 # Replace the kernel with the one from the Fedora repository
-KERNEL_FLAVOR="${KERNEL_FLAVOR}"
+FEDORA_KERNEL_FLAVOR="${FEDORA_KERNEL_FLAVOR}"
 
 dnf install -y dnf-plugins-core rpmrebuild sbsigntools openssl skopeo jq
 
-case "$KERNEL_FLAVOR" in
+case "$FEDORA_KERNEL_FLAVOR" in
   "stable")
     # <major>.<minor>.<patch>-<num>-fc<fedora_version>.<arch>
     KERNEL_VERSION=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"]')
