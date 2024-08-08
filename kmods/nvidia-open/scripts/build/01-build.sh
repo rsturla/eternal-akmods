@@ -11,8 +11,8 @@ dnf install -y \
 KERNEL_VERSION="$(rpm -q kernel-core --queryformat '%{VERSION}-%{RELEASE}.%{ARCH}')"
 NVIDIA_AKMOD_VERSION="$(basename "$(rpm -q "akmod-nvidia" --queryformat '%{VERSION}-%{RELEASE}')" ".fc${RELEASE%%.*}")"
 
-# Change to the open source kernel module
-sed -i -e 's/kernel$/kernel-open/g' /etc/nvidia/kernel.conf
+# Build the open source kernel module
+sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel-open/" /etc/nvidia/kernel.conf
 
 akmods --force --kernels "${KERNEL_VERSION}" --kmod "nvidia"
 
