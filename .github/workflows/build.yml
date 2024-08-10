@@ -21,6 +21,7 @@ jobs:
       matrix:
         fedora-version: [39, 40, stable]
         kmod-name: [nvidia, nvidia-open]
+        kmod-version: [555, 560]
     env:
       IMAGE_NAME: akmods/${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
@@ -39,9 +40,9 @@ jobs:
         shell: bash
         run: |
           tags=()
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-$(date +%Y%m%d%H%M%S)")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${GITHUB_SHA::7}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}-$(date +%Y%m%d%H%M%S)")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ matrix.kmod-version }}-${GITHUB_SHA::7}")
 
           echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
           concat_tags=$(IFS=, ; echo "${tags[*]}")
@@ -88,6 +89,7 @@ jobs:
             KMOD_NAME=${{ matrix.kmod-name }}
             FEDORA_KERNEL_FLAVOR=${{ matrix.fedora-version }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
+            KMOD_VERSION=${{ matrix.kmod-version }}
 
   check:
     needs: [build]
