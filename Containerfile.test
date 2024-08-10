@@ -3,7 +3,7 @@ ARG KMOD_NAME=nvidia
 ARG KMOD_IMAGE=${KMOD_NAME}-kmod
 ARG KMOD_TAG=555
 
-FROM ${KMOD_IMAGE}:${KMOD_TAG} as kmod-cache
+FROM ${KMOD_IMAGE}:${KMOD_TAG} AS kmod-cache
 FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION}
 
 RUN rpm-ostree install \
