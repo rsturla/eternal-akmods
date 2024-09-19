@@ -15,7 +15,7 @@ env:
 jobs:
   build:
     name: Build kmods
-    runs-on: ${{ matrix.arch == 'x64' && 'ubuntu-latest' || format('runs-on,runner=1cpu-linux-${0},run-id=${1}', matrix.arch, github.run_id) }}
+    runs-on: ${{ matrix.arch == 'x64' && 'ubuntu-latest' || format('runs-on,runner=1cpu-linux-{0},run-id={1}', matrix.arch, github.run_id) }}
     strategy:
       fail-fast: false
       matrix:
