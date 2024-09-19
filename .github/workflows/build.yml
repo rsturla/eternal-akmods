@@ -102,7 +102,6 @@ jobs:
       matrix:
         fedora-version: [39, 40, stable]
         kmod-name: [nvidia, nvidia-open]
-        arch: [x64, arm64]
     env:
       IMAGE_NAME: akmods/multiarch-${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
