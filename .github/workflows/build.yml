@@ -85,6 +85,7 @@ jobs:
           file: ./Containerfile
           context: .
           # push: ${{ github.event_name != 'pull_request' }}
+          platforms: ${{ env.ARCH == 'x86_64' && 'linux/amd64' || format('linux/{0}', env.ARCH) }}
           push: true
           tags: ${{ steps.generate-meta.outputs.concat_tags }}
           cache-from: type=gha
