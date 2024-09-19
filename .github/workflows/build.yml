@@ -25,7 +25,7 @@ jobs:
     env:
       IMAGE_NAME: akmods/multiarch-${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
-      ARCH: ${{ matrix.arch }} == 'x64' && 'x86_64' || ${{ matrix.arch }}
+      ARCH: ${{ matrix.arch == 'x64' && 'x86_64' || ${{ matrix.arch }} }}
 
     permissions:
       contents: read
