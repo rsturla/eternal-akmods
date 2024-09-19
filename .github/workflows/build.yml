@@ -19,8 +19,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora-version: [39, 40, stable]
-        kmod-name: [nvidia, nvidia-open]
+        # fedora-version: [39, 40, stable]
+        # kmod-name: [nvidia, nvidia-open]
+        fedora-version: [40]
+        kmod-name: [nvidia]
         arch: [x64, arm64]
     env:
       IMAGE_NAME: akmods/multiarch-${{ matrix.kmod-name }}
