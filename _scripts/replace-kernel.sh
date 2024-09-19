@@ -21,9 +21,10 @@ case "$FEDORA_KERNEL_FLAVOR" in
     ;;
 esac
 
+ARCH=$(uname -m)
+KERNEL_VERSION="$(echo "$KERNEL_VERSION" | rev | cut -d . -f 2- | rev).${ARCH}"
 KERNEL_MAJOR_MINOR_PATCH=$(echo "$KERNEL_VERSION" | cut -d '-' -f 1)
 KERNEL_RELEASE="$(echo "$KERNEL_VERSION" | cut -d - -f 2 | cut -d . -f 1).$(echo "$KERNEL_VERSION" | cut -d - -f 2 | cut -d . -f 2)"
-ARCH=$(uname -m)
 dnf install -y \
   https://kojipkgs.fedoraproject.org//packages/kernel/"$KERNEL_MAJOR_MINOR_PATCH"/"$KERNEL_RELEASE"/"$ARCH"/kernel-"$KERNEL_VERSION".rpm \
   https://kojipkgs.fedoraproject.org//packages/kernel/"$KERNEL_MAJOR_MINOR_PATCH"/"$KERNEL_RELEASE"/"$ARCH"/kernel-modules-"$KERNEL_VERSION".rpm \
