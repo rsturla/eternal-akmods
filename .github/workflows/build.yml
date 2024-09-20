@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 0,12 * * *"
   pull_request:
+  schedule:
+    - cron: "0 0 * * 1" # Every Monday at 12:00am
   workflow_dispatch:
 
 env:
@@ -15,15 +15,17 @@ env:
 jobs:
   build:
     name: Build kmods
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.arch == 'x64' && 'ubuntu-latest' || format('runs-on,runner=1cpu-linux-{0},run-id={1}', matrix.arch, github.run_id) }}
     strategy:
       fail-fast: false
       matrix:
         fedora-version: [40, 41, stable]
-        kmod-name: [nvidia, nvidia-open]
+        kmod-name: [nvidia-open]
+        arch: [x64]
     env:
       IMAGE_NAME: akmods/${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
+      ARCH: ${{ matrix.arch == 'x64' && 'x86_64' || format('{0}', matrix.arch) }}
 
     permissions:
       contents: read
@@ -39,9 +41,9 @@ jobs:
         shell: bash
         run: |
           tags=()
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-$(date +%Y%m%d%H%M%S)")
-          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${GITHUB_SHA::7}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ env.ARCH }}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-$(date +%Y%m%d%H%M%S)-${{ env.ARCH }}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${GITHUB_SHA::7}-${{ env.ARCH }}")
 
           echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
           concat_tags=$(IFS=, ; echo "${tags[*]}")
@@ -81,6 +83,7 @@ jobs:
           file: ./Containerfile
           context: .
           push: ${{ github.event_name != 'pull_request' }}
+          platforms: ${{ env.ARCH == 'x86_64' && 'linux/amd64' || format('linux/{0}', env.ARCH) }}
           tags: ${{ steps.generate-meta.outputs.concat_tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -89,8 +92,53 @@ jobs:
             FEDORA_KERNEL_FLAVOR=${{ matrix.fedora-version }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
 
+  manifest:
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        fedora-version: [40, 41, stable]
+        kmod-name: [nvidia-open]
+    env:
+      IMAGE_NAME: akmods/${{ matrix.kmod-name }}
+      FEDORA_VERSION: ${{ matrix.fedora-version }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    steps:
+      - name: Generate tags
+        id: generate-tags
+        run: |
+          tags=()
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-$(date +%Y%m%d%H%M%S)")
+          tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${GITHUB_SHA::7}")
+          echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
+
+      - name: Create Manifest
+        run: |
+          podman manifest create ${{ env.IMAGE_NAME }}
+          podman manifest add --all ${{ env.IMAGE_NAME }} ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-x86_64
+          podman manifest add --all ${{ env.IMAGE_NAME }} ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-arm64
+
+      - name: Login to GHCR
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Manifest
+        run: |
+          for tag in ${{ steps.generate-tags.outputs.tags }}; do
+            podman manifest push --all=false ${{ env.IMAGE_NAME }} $tag
+          done
+
   check:
-    needs: [build]
+    needs: [build, manifest]
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
