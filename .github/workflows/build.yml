@@ -99,8 +99,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora-version: [39, 40, stable]
-        kmod-name: [nvidia, nvidia-open]
+        fedora-version: [40, stable]
+        kmod-name: [nvidia-open]
     env:
       IMAGE_NAME: akmods/${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
