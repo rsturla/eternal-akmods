@@ -108,6 +108,10 @@ jobs:
     env:
       IMAGE_NAME: akmods/multiarch-${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     steps:
       - name: Generate tags
         id: generate-tags
