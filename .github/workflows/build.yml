@@ -121,8 +121,8 @@ jobs:
       - name: Create Manifest
         run: |
           podman manifest create ${{ env.IMAGE_NAME }}
-          podman manifest add ${{ env.IMAGE_NAME }} ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-x86_64
-          podman manifest add --arch=arm64 ${{ env.IMAGE_NAME }} ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-arm64
+          podman manifest add --all ${{ env.IMAGE_NAME }} ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-x86_64
+          podman manifest add --all ${{ env.IMAGE_NAME }} ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-arm64
 
       - name: Push Manifest
         run: |
