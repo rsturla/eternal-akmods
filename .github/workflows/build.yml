@@ -19,13 +19,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # fedora-version: [39, 40, stable]
-        # kmod-name: [nvidia, nvidia-open]
-        fedora-version: [40]
-        kmod-name: [nvidia]
+        fedora-version: [39, 40, stable]
+        kmod-name: [nvidia, nvidia-open]
         arch: [x64, arm64]
     env:
-      IMAGE_NAME: akmods/multiarch-${{ matrix.kmod-name }}
+      IMAGE_NAME: akmods/${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
       ARCH: ${{ matrix.arch == 'x64' && 'x86_64' || format('{0}', matrix.arch) }}
 
@@ -84,9 +82,8 @@ jobs:
         with:
           file: ./Containerfile
           context: .
-          # push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' }}
           platforms: ${{ env.ARCH == 'x86_64' && 'linux/amd64' || format('linux/{0}', env.ARCH) }}
-          push: true
           tags: ${{ steps.generate-meta.outputs.concat_tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -96,17 +93,16 @@ jobs:
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
 
   manifest:
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     needs: build
     strategy:
       fail-fast: false
       matrix:
-        # fedora-version: [39, 40, stable]
-        # kmod-name: [nvidia, nvidia-open]
-        fedora-version: [40]
-        kmod-name: [nvidia]
+        fedora-version: [39, 40, stable]
+        kmod-name: [nvidia, nvidia-open]
     env:
-      IMAGE_NAME: akmods/multiarch-${{ matrix.kmod-name }}
+      IMAGE_NAME: akmods/${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
     permissions:
       contents: read
