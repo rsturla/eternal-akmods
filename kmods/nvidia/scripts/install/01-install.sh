@@ -5,6 +5,8 @@ source /tmp/akmods/info/nvidia-vars
 
 ARCH=$(uname -m)
 
+rpm-ostree install /tmp/akmods/rpms/nvidia-addons-*.rpm
+
 # Enable nvidia-container-toolkit repo
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/negativo17-fedora-nvidia.repo
