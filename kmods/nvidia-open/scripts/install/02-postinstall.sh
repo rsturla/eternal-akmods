@@ -9,7 +9,7 @@ rm -rf /tmp/yum.repos.d
 
 semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
 
-ln -s /usr/bin/ld.bfd /etc/alternatives/ld
-ln -s /etc/alternatives/ld /usr/bin/ld
+ln -sf /usr/bin/ld.bfd /etc/alternatives/ld
+ln -sf /etc/alternatives/ld /usr/bin/ld
 
 systemctl enable eternal-nvctk-cdi.service
