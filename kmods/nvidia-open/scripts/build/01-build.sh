@@ -40,8 +40,18 @@ rpmbuild -ba \
     ${ADDONS_DIR}/../nvidia-addons.spec
 
 mkdir -p /var/cache/rpms
-cp ${ADDONS_DIR}/rpmbuild/RPMS/noarch/*.rpm /var/cache/rpms
 
+for rpm in $(find /var/cache/akmods/ -type f -name \*.rpm); do
+    echo "COPY ${rpm} TO /var/cache/rpms/"
+    cp "${rpm}" /var/cache/rpms/;
+done
+
+for rpm in $(find ${ADDONS_DIR}/rpmbuild/RPMS/"$(uname -m)"/ -type f -name \*.rpm); do
+    echo "COPY ${rpm} TO /var/cache/rpms/"
+    cp "${rpm}" /var/cache/rpms/;
+done
+
+find /var/cache/rpms
 
 # Create a file with the variables needed for the next steps
 cat <<EOF > /var/cache/akmods/nvidia-vars
