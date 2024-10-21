@@ -3,7 +3,7 @@
 set -oeux pipefail
 
 mkdir -p /rpms
-for rpm in $(find /var/cache -name '*.rpm'); do
+for rpm in $(find /var/cache/rpms -name '*.rpm'); do
   echo "Copying $rpm..."
   cp -a $rpm /rpms
 done

@@ -37,4 +37,4 @@ install -Dm644 /tmp/certs/private_key.priv /etc/pki/akmods/private/private_key.p
 chmod 1777 /tmp /var/tmp
 
 # create directories for later copying resulting artifacts
-mkdir -p /var/cache/rpms/{kmods,eternal}
+mkdir -p /var/cache/rpms
