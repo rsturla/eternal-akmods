@@ -49,7 +49,7 @@ for rpm in $(find ${ADDONS_DIR}/rpmbuild/RPMS/"$(uname -m)"/ -type f -name \*.rp
     cp "${rpm}" /var/cache/rpms/;
 done
 
-for rp in $(find ${ADDONS_DIR}/rpmbuild/RPMS/noarch/ -type f -name \*.rpm); do
+for rpm in $(find ${ADDONS_DIR}/rpmbuild/RPMS/noarch/ -type f -name \*.rpm); do
     cp "${rpm}" /var/cache/rpms/;
 done
 
