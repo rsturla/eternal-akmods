@@ -12,7 +12,7 @@ sed -i -e 's/args = \["rpmbuild", "-bb"\]/args = \["rpmbuild", "-bb", "--buildro
 for rpm in $(find /var/cache/rpms/kmods -type f -name \*.rpm); do
   basename="$(basename ${rpm})"
   name="${basename%%-6*}"
-  fpm --verbose -s rpm -t rpm -p ${rpm} -f --name ${name} ${rpm}; \
+  fpm --verbose -s rpm -t rpm -p ${rpm} -f --name ${name} ${rpm};
 done
 
 ls -l /rpms
