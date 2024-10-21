@@ -42,12 +42,14 @@ rpmbuild -ba \
 mkdir -p /var/cache/rpms
 
 for rpm in $(find /var/cache/akmods/ -type f -name \*.rpm); do
-    echo "COPY ${rpm} TO /var/cache/rpms/"
     cp "${rpm}" /var/cache/rpms/;
 done
 
 for rpm in $(find ${ADDONS_DIR}/rpmbuild/RPMS/"$(uname -m)"/ -type f -name \*.rpm); do
-    echo "COPY ${rpm} TO /var/cache/rpms/"
+    cp "${rpm}" /var/cache/rpms/;
+done
+
+for rp in $(find ${ADDONS_DIR}/rpmbuild/RPMS/noarch/ -type f -name \*.rpm); do
     cp "${rpm}" /var/cache/rpms/;
 done
 
