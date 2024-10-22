@@ -14,7 +14,8 @@ sed -i -e 's/args = \["rpmbuild", "-bb"\]/args = \["rpmbuild", "-bb", "--buildro
 
 for rpm in $(find /rpms -type f -name \*.rpm); do
   basename="$(basename ${rpm})"
-  name="${basename%%-6*}"
+  # Remove kernel version from the RPM name (e.g. kmod-nvidia-6.11.3-300.fc41.x86_64-3:560.35.03-2.fc41.x86_64 -> kmod-nvidia-3:560.35.03-2.fc41.x86_64)
+  name=$(echo ${basename} | sed -r "s/(-${kernel_version})//g")
 
   if [[ "$basename" == *"$kernel_version"* ]]; then
     echo "Processing $rpm with kernel version $kernel_version..."
