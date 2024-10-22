@@ -9,6 +9,10 @@ on:
     - cron: "0 0 * * *" # Every day at 12:00am
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.repository_owner }}-${{ github.repository_name }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
 env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
