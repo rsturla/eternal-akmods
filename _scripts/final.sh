@@ -8,7 +8,7 @@ for rpm in $(find /var/cache/rpms -name '*.rpm'); do
   cp -a $rpm /rpms
 done
 
-kernel_version=$(uname -r)
+kernel_version=$(rpm -q --qf "%{VERSION}-%{RELEASE}.%{ARCH}\n" kernel-core | head -n 1)
 
 sed -i -e 's/args = \["rpmbuild", "-bb"\]/args = \["rpmbuild", "-bb", "--buildroot", "#{build_path}\/BUILD"\]/g' /usr/local/share/gems/gems/fpm-*/lib/fpm/package/rpm.rb;
 
