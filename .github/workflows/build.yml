@@ -25,7 +25,7 @@ jobs:
       matrix:
         fedora-version: [40, 41, stable]
         kmod-name: [nvidia-open]
-        arch: [x64]
+        arch: [x64, arm64]
     env:
       IMAGE_NAME: akmods/${{ matrix.kmod-name }}
       FEDORA_VERSION: ${{ matrix.fedora-version }}
@@ -126,6 +126,7 @@ jobs:
         run: |
           podman manifest create ${{ env.IMAGE_NAME }}
           podman manifest add --all ${{ env.IMAGE_NAME }} ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-x86_64
+          podman manifest add --all ${{ env.IMAGE_NAME }} ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-amd64
 
       - name: Login to GHCR
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
