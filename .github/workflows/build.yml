@@ -91,12 +91,13 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           platforms: ${{ env.ARCH == 'x86_64' && 'linux/amd64' || format('linux/{0}', env.ARCH) }}
           tags: ${{ steps.generate-meta.outputs.concat_tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           build-args: |
             KMOD_NAME=${{ matrix.kmod-name }}
             FEDORA_KERNEL_FLAVOR=${{ matrix.fedora-version }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
+
+      - name: View images
+        run: docker image ls
 
       - name: Build Test Image
         if: ${{ github.event_name == 'pull_request' }}
