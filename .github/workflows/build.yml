@@ -45,7 +45,7 @@ jobs:
         shell: bash
         run: |
           tags=()
-          image_name_full="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
+          primary_tag="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${GITHUB_SHA::7}-${{ env.ARCH }}"
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ env.ARCH }}")
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-$(date +%Y%m%d%H%M%S)-${{ env.ARCH }}")
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${GITHUB_SHA::7}-${{ env.ARCH }}")
@@ -53,7 +53,7 @@ jobs:
           echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
           concat_tags=$(IFS=, ; echo "${tags[*]}")
           echo "concat_tags=$concat_tags" >> $GITHUB_OUTPUT
-          echo "image_name_full=$image_name_full" >> $GITHUB_OUTPUT
+          echo "primary_tag=$primary_tag" >> $GITHUB_OUTPUT
 
       - name: Fetch akmods signing key
         run: |
@@ -108,7 +108,7 @@ jobs:
           platforms: ${{ env.ARCH == 'x86_64' && 'linux/amd64' || format('linux/{0}', env.ARCH) }}
           tags: test
           build-args: |
-            CACHE_IMAGE=${{ steps.generate-meta.outputs.image_name_full }}@${{ steps.build-image.outputs.digest }}
+            CACHE_IMAGE=${{ steps.generate-meta.outputs.primary_tag }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
 
   manifest:
