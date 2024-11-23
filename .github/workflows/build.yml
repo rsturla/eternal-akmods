@@ -107,8 +107,6 @@ jobs:
           push: false
           platforms: ${{ env.ARCH == 'x86_64' && 'linux/amd64' || format('linux/{0}', env.ARCH) }}
           tags: test
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           build-args: |
             CACHE_IMAGE=${{ steps.generate-meta.outputs.image_name_full }}@${{ outputs.build-image.digest }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
