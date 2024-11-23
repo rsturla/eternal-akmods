@@ -5,7 +5,7 @@ source /tmp/akmods/info/nvidia-vars
 
 ARCH=$(uname -m)
 
-rpm-ostree install /tmp/akmods/rpms/nvidia-addons-*.rpm
+dnf install -y /tmp/akmods/rpms/nvidia-addons-*.rpm
 
 # Enable nvidia-container-toolkit repo
 sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
@@ -44,7 +44,7 @@ else
 fi
 
 # Combine common and architecture-specific packages into a single install command
-rpm-ostree install "${COMMON_PKGS[@]}" "${ARCH_PKGS[@]}"
+dnf install -y "${COMMON_PKGS[@]}" "${ARCH_PKGS[@]}"
 
 # Copy and update modprobe configuration for Nvidia
 cp /etc/modprobe.d/nvidia-modeset.conf /usr/lib/modprobe.d/nvidia-modeset.conf
