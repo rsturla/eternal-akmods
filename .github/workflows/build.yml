@@ -108,7 +108,7 @@ jobs:
           platforms: ${{ env.ARCH == 'x86_64' && 'linux/amd64' || format('linux/{0}', env.ARCH) }}
           tags: test
           build-args: |
-            CACHE_IMAGE=${{ steps.generate-meta.outputs.image_name_full }}@${{ outputs.build-image.digest }}
+            CACHE_IMAGE=${{ steps.generate-meta.outputs.image_name_full }}@${{ steps.build-image.outputs.digest }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
 
   manifest:
