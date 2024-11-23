@@ -23,7 +23,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora-version: [40, 41, stable]
+        fedora-version: [41, stable]
         kmod-name: [nvidia-open]
         arch: [x64]
     env:
@@ -45,6 +45,7 @@ jobs:
         shell: bash
         run: |
           tags=()
+          image_name_full="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${{ env.ARCH }}")
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-$(date +%Y%m%d%H%M%S)-${{ env.ARCH }}")
           tags+=("${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.fedora-version }}-${GITHUB_SHA::7}-${{ env.ARCH }}")
@@ -52,6 +53,7 @@ jobs:
           echo "tags=${tags[*]}" >> $GITHUB_OUTPUT
           concat_tags=$(IFS=, ; echo "${tags[*]}")
           echo "concat_tags=$concat_tags" >> $GITHUB_OUTPUT
+          echo "image_name_full=$image_name_full" >> $GITHUB_OUTPUT
 
       - name: Fetch akmods signing key
         run: |
@@ -105,12 +107,11 @@ jobs:
           context: .
           push: false
           platforms: ${{ env.ARCH == 'x86_64' && 'linux/amd64' || format('linux/{0}', env.ARCH) }}
-          tags: ${{ steps.generate-meta.outputs.concat_tags }}
+          tags: test
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            KMOD_NAME=${{ matrix.kmod-name }}
-            KMOD_TAG=${{ matrix.fedora-version }}
+            CACHE_IMAGE=${{ steps.generate-meta.outputs.image_name_full }}@${{ outputs.build-image.digest }}
             FEDORA_VERSION=${{ env.FEDORA_VERSION }}
 
   manifest:
@@ -120,7 +121,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora-version: [40, 41, stable]
+        fedora-version: [41, stable]
         kmod-name: [nvidia-open]
     env:
       IMAGE_NAME: akmods/${{ matrix.kmod-name }}

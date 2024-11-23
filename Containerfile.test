@@ -2,8 +2,9 @@ ARG FEDORA_VERSION=41
 ARG KMOD_NAME=nvidia
 ARG KMOD_IMAGE=${KMOD_NAME}-kmod
 ARG KMOD_TAG=latest
+ARG CACHE_IMAGE=${KMOD_IMAGE}:${KMOD_TAG}
 
-FROM ${KMOD_IMAGE}:${KMOD_TAG} as kmod-cache
+FROM ${CACHE_IMAGE} AS kmod-cache
 FROM quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION}
 
 RUN dnf install -y \
