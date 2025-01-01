@@ -7,7 +7,7 @@ FEDORA_KERNEL_FLAVOR="${FEDORA_KERNEL_FLAVOR}"
 dnf install -y dnf-plugins-core rpmrebuild sbsigntools openssl skopeo jq
 
 # <major>.<minor>.<patch>-<num>.fc<fedora_version>.<arch>
-FEDORA_KERNEL_VERSION=$(skopeo inspect docker://quay.io/fedora-ostree-desktops/base:${FEDORA_VERSION} | jq -r '.Labels["ostree.linux"]')
+FEDORA_KERNEL_VERSION=$(skopeo inspect docker://quay.io/fedora/fedora-silverblue:${FEDORA_VERSION} | jq -r '.Labels["ostree.linux"]')
 
 case "$FEDORA_KERNEL_FLAVOR" in
   "stable")
